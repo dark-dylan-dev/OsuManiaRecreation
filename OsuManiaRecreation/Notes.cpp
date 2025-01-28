@@ -8,7 +8,7 @@ bool LevelNotes::isInTheSlot(const sf::CircleShape& noteSlot) {
 
 singleNote::singleNote(sf::CircleShape& noteSlot, const int& cycleLevel) {
 	setRadius(noteSlot.getRadius());
-	setPosition(sf::Vector2f(noteSlot.getPosition().x + noteSlot.getOutlineThickness(), -getLocalBounds().height * cycleLevel));
+	setPosition(sf::Vector2f(noteSlot.getPosition().x, -getLocalBounds().height * cycleLevel));
 	setFillColor(sf::Color::White);
 	this->noteSlot = getPosition().x;
 }
@@ -19,7 +19,7 @@ float singleNote::getYPosition() {
 
 sliderNote::sliderNote(sf::CircleShape& noteSlot, float noteLength, const int& cycleLevel) {
 	setRadius(noteSlot.getRadius());
-	setPosition(sf::Vector2f(noteSlot.getPosition().x + noteSlot.getOutlineThickness(), -getLocalBounds().height * cycleLevel));
+	setPosition(sf::Vector2f(noteSlot.getPosition().x, -getLocalBounds().height * cycleLevel));
 	setFillColor(sf::Color::White);
 	this->noteSlot = getPosition().x;
 	this->noteLength = noteLength;

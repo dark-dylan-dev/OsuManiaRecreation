@@ -13,6 +13,7 @@ namespace {
 	sf::Font AllerBold;
 	// Shapes
 	sf::RectangleShape playAreaBackground;
+	sf::RectangleShape earlyMissZone;
 	// Using a DFJK model to name the bottom cirlces
 	sf::CircleShape DHitCircle;
 	sf::CircleShape FHitCircle;
@@ -41,6 +42,9 @@ void loadAssets(sf::RenderWindow& window) {
 	playAreaBackground.setPosition(window.getSize().x / 2.f - playAreaBackground.getLocalBounds().width / 2.f, 0.f);
 	float playAreaBackgroundWidthPercent = playAreaBackground.getSize().x / 100.f;
 	float playAreaBackgroundHeightPercent = playAreaBackground.getSize().y / 100.f;
+	earlyMissZone.setSize(sf::Vector2f(playAreaBackground.getSize().x, playAreaBackgroundHeightPercent * 10.f));
+	earlyMissZone.setFillColor(sf::Color(255, 0, 0, 125));
+	earlyMissZone.setPosition(sf::Vector2f(playAreaBackground.getPosition().x, playAreaBackgroundHeightPercent * 70.f));
 	// CircleShape
 	DHitCircle.setRadius(playAreaBackground.getSize().x / 10.f);
 	DHitCircle.setFillColor(sf::Color(200, 200, 200, 50));
@@ -77,6 +81,7 @@ void loadAssets(sf::RenderWindow& window) {
 void draw(sf::RenderWindow& window) {
 	window.clear();
 
+	window.draw(earlyMissZone);
 	window.draw(playAreaBackground);
 	window.draw(FPSText);
 

@@ -23,6 +23,7 @@ private:
 	// STL
 	bool isRunning;
 	float deltaTime;
+	bool isLevelStarted = false;
 	bool isDPressed = false;
 	bool isFPressed = false;
 	bool isJPressed = false;
