@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Notes.h"
 
 namespace {
 	// STL booleans Assets activation related
@@ -17,6 +18,9 @@ namespace {
 	sf::CircleShape FHitCircle;
 	sf::CircleShape JHitCircle;
 	sf::CircleShape KHitCircle;
+	sf::CircleShape singleTestNote;
+	sf::CircleShape sliderHead;
+	sf::CircleShape sliderTail;
 	// Texts
 	sf::Text FPSText;
 	sf::Text comboText;
@@ -49,6 +53,10 @@ void loadAssets(sf::RenderWindow& window) {
 	FHitCircle.setPosition(DHitCircle.getPosition().x + DHitCircle.getLocalBounds().width + 2.1f * playAreaBackgroundWidthPercent, DHitCircle.getPosition().y);
 	JHitCircle.setPosition(FHitCircle.getPosition().x + DHitCircle.getLocalBounds().width + 2.1f * playAreaBackgroundWidthPercent, DHitCircle.getPosition().y);
 	KHitCircle.setPosition(JHitCircle.getPosition().x + DHitCircle.getLocalBounds().width + 2.1f * playAreaBackgroundWidthPercent, DHitCircle.getPosition().y);
+	singleTestNote = DHitCircle;
+	singleTestNote.setFillColor(sf::Color::White);
+	singleTestNote.setOutlineThickness(0);
+	singleTestNote.setPosition(sf::Vector2f(DHitCircle.getPosition().x, -DHitCircle.getLocalBounds().height));
 	// Texts
 	FPSText.setFont(Arial);
 	FPSText.setCharacterSize(20);
@@ -77,8 +85,7 @@ void draw(sf::RenderWindow& window) {
 	window.draw(JHitCircle);
 	window.draw(KHitCircle);
 
-	window.draw(comboText);
-	window.draw(scoreText);
+	// Notes
 
-	window.display();
+	window.draw(singleTestNote);
 }

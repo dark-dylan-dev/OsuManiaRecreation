@@ -1,0 +1,23 @@
+#Name : Test level / 170BPM
+SPEED 170
+WAIT 10
+D
+F
+J
+K
+J
+F
+D
+WAIT 3
+SLIDER J 10
+DJ
+WAIT 1
+FK
+WAIT 1
+DJ
+WAIT 1
+FK
+WAIT 3
+DFJK
+#End here
+END

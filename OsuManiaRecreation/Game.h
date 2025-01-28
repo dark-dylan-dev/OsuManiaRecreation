@@ -4,8 +4,12 @@
 // STL
 #include <iostream>
 #include <vector>
+#include <string>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
+#include <memory>
+
 // SFML
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"

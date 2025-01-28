@@ -1,6 +1,11 @@
 #include "AssetLoader.hpp"
+#include "LevelFileLoader.hpp"
 
 #include "Game.h"
+
+namespace {
+	std::vector<std::unique_ptr<LevelNotes>> levelNotesVector;
+}
 
 Game::Game() :
 	window(sf::VideoMode::getFullscreenModes().at(2), "osu! mania recreation", sf::Style::Default),
@@ -15,9 +20,9 @@ Game::Game() :
 
 void Game::run() {
 
-	//Input input;
-
 	loadAssets(window);
+	loadLevel("Assets/Levels/testLevel.txt", levelNotesVector);
+
 	sf::Event event{};
 
 	while (window.isOpen()) {
@@ -29,6 +34,14 @@ void Game::run() {
 		pollEvents(event);
 		update(deltaTime);
 		draw(window);
+		for (auto& note : levelNotesVector) {
+			window.draw(*note);
+		}
+
+		window.draw(comboText);
+		window.draw(scoreText);
+
+		window.display();
 
 	}
 }
@@ -135,4 +148,11 @@ void Game::update(const float& deltaTime) {
 		scoreText.setString("0" + std::to_string(score));
 	else
 		scoreText.setString(std::to_string(score));
+	// Single note
+	singleTestNote.move(sf::Vector2f(0, deltaTime * 200));
+
+	for (auto& note : levelNotesVector) {
+		note->move(sf::Vector2f(0, deltaTime * 200));
+	}
+
 }
