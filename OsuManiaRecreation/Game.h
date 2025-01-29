@@ -42,6 +42,9 @@ private:
 	void handleInputs(sf::Event event);
 	void drawNotes();
 
+public:
+	// Only for Notes.h
+	std::vector<sf::CircleShape> getCirclesSlots();
 };
 
 #endif

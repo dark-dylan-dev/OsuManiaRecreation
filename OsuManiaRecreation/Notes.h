@@ -7,6 +7,7 @@ class LevelNotes : public sf::CircleShape {
 public:
 	bool isInTheSlot(const sf::CircleShape& noteSlot); // onPress
 	virtual float getYPosition() = 0; // Needs to be defined for singleNote and sliderNote
+	char getAssociatedKey(std::vector<sf::CircleShape>& hitCircles);
 };
 
 class singleNote : public LevelNotes {
@@ -32,8 +33,10 @@ public:
 class Factory {
 public:
 	static std::unique_ptr<LevelNotes> createNote(const std::string& type, sf::CircleShape& noteSlot, const int& cycleLevel, const char& associatedKey) {
-		if (type == "singleNote") return std::make_unique<singleNote>(noteSlot, cycleLevel, associatedKey);
-		else if (type == "sliderNote") return std::make_unique<sliderNote>(noteSlot, 0.f, cycleLevel, associatedKey);
+		if (type == "singleNote") 
+			return std::make_unique<singleNote>(noteSlot, cycleLevel, associatedKey);
+		else if (type == "sliderNote") 
+			return std::make_unique<sliderNote>(noteSlot, 0.f, cycleLevel, associatedKey); // 0.f à changer plus tard
 		return nullptr;
 	}
 };

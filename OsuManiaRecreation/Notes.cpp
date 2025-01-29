@@ -6,6 +6,22 @@ bool LevelNotes::isInTheSlot(const sf::CircleShape& noteSlot) {
 	return false;
 }
 
+char LevelNotes::getAssociatedKey(std::vector<sf::CircleShape>& hitCircles) {
+	if (getPosition().x == hitCircles[0].getPosition().x) {
+		return 'D';
+	}
+	if (getPosition().x == hitCircles[1].getPosition().x) {
+		return 'F';
+	}
+	if (getPosition().x == hitCircles[2].getPosition().x) {
+		return 'J';
+	}
+	if (getPosition().x == hitCircles[3].getPosition().x) {
+		return 'K';
+	}
+	return ' '; // Utilisé pour les exceptions
+}
+
 singleNote::singleNote(sf::CircleShape& noteSlot, const int& cycleLevel, const char associatedKey) {
 	setRadius(noteSlot.getRadius());
 	setPosition(sf::Vector2f(noteSlot.getPosition().x, -getLocalBounds().height * cycleLevel));

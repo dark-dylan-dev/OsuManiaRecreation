@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Notes.h"
 
 namespace {
 	// sf::Drawable content
@@ -29,6 +28,16 @@ namespace {
 	sf::Text FPSText;
 	sf::Text comboText;
 	sf::Text scoreText;
+}
+
+std::vector<sf::CircleShape> getHitCircles() {
+	std::vector<sf::CircleShape> hitCircles;
+	hitCircles.reserve(4);
+	hitCircles.emplace_back(DHitCircle);
+	hitCircles.emplace_back(FHitCircle);
+	hitCircles.emplace_back(JHitCircle);
+	hitCircles.emplace_back(KHitCircle);
+	return hitCircles;
 }
 
 void loadAssets(sf::RenderWindow& window) {
@@ -96,10 +105,10 @@ void draw(sf::RenderWindow& window) {
 	window.clear();
 
 	// Debug part
-	window.draw(earlyMissZone);
+	/*window.draw(earlyMissZone);
 	window.draw(early50Zone);
 	window.draw(early100Zone);
-	window.draw(ThreeHundredZone);
+	window.draw(ThreeHundredZone);*/
 	//window.draw(late100zone);
 	//window.draw(late50zone);
 	window.draw(lateMissZone);

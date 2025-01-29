@@ -5,6 +5,7 @@
 
 namespace {
 	std::vector<std::unique_ptr<LevelNotes>> levelNotesVector;
+	std::vector<sf::CircleShape> hitCircles;
 }
 
 Game::Game() :
@@ -18,10 +19,15 @@ Game::Game() :
 	window.setFramerateLimit(60);
 }
 
+std::vector<sf::CircleShape> Game::getCirclesSlots() {
+	return hitCircles;
+}
+
 void Game::run() {
 
 	loadAssets(window);
 	loadLevel("Assets/Levels/testLevel.txt", levelNotesVector);
+	hitCircles = getHitCircles();
 
 	sf::Event event{};
 
@@ -42,7 +48,7 @@ void Game::run() {
 void Game::FPSCalc(const float& deltaTime) {
 	float FPS = 1.f / deltaTime;
 	std::ostringstream oss;
-	oss << std::fixed << std::setprecision(2) << FPS;
+	oss << std::fixed << std::setprecision(1) << FPS;
 	std::string FPSValue = oss.str();
 	FPSText.setString("FPS : " + FPSValue);
 }
@@ -52,32 +58,72 @@ void Game::handleInputs(sf::Event event) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		// Reprendre ici pour les hits (D, F, J et K)
 		if (!isDPressed) {
-			combo++;
-			score += 300;
+			for (auto& note : levelNotesVector) {
+				if (note == nullptr) {
+					// Skip it
+				}
+				else if (note->getAssociatedKey(hitCircles) == 'D') {
+					if (DHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || DHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
+						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
+						combo++;
+					}
+				}
+			}
 		}
 		DHitCircle.setFillColor(pressHitCircle);
 		isDPressed = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
 		if (!isFPressed) {
-			combo++;
-			score += 300;
+			for (auto& note : levelNotesVector) {
+				if (note == nullptr) {
+					// Skip it
+				}
+				else if (note->getAssociatedKey(hitCircles) == 'F') {
+					if (FHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || FHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
+						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
+						combo++;
+					}
+				}
+			}
 		}
 		FHitCircle.setFillColor(pressHitCircle);
 		isFPressed = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
 		if (!isJPressed) {
-			combo++;
-			score += 300;
+			for (auto& note : levelNotesVector) {
+				if (note == nullptr) {
+					// Skip it
+				}
+				else if (note->getAssociatedKey(hitCircles) == 'J') {
+					if (JHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || JHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
+						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
+						combo++;
+					}
+				}
+			}
 		}
 		JHitCircle.setFillColor(pressHitCircle);
 		isJPressed = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
 		if (!isKPressed) {
-			combo++;
-			score += 300;
+			for (auto& note : levelNotesVector) {
+				if (note == nullptr) {
+					// Skip it
+				}
+				else if (note->getAssociatedKey(hitCircles) == 'K') {
+					if (KHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || KHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
+						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
+						combo++;
+					}
+				}
+			}
 		}
 		KHitCircle.setFillColor(pressHitCircle);
 		isKPressed = true;
