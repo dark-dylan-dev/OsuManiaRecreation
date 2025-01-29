@@ -39,6 +39,7 @@ private:
 	void pollEvents(sf::Event event);
 	void update(const float& deltaTime);
 	void handleInputs(sf::Event event);
+	void drawNotes();
 
 };
 

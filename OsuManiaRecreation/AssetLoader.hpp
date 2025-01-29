@@ -2,8 +2,6 @@
 #include "Notes.h"
 
 namespace {
-	// STL booleans Assets activation related
-
 	// sf::Drawable content
 	// Colors
 	sf::Color noPressHitCircle = sf::Color(200, 200, 200, 50);
@@ -14,12 +12,17 @@ namespace {
 	// Shapes
 	sf::RectangleShape playAreaBackground;
 	sf::RectangleShape earlyMissZone;
-	// Using a DFJK model to name the bottom cirlces
+	sf::RectangleShape lateMissZone;
+	sf::RectangleShape early50Zone;
+	sf::RectangleShape late50Zone;
+	sf::RectangleShape early100Zone;
+	sf::RectangleShape late100Zone;
+	sf::RectangleShape ThreeHundredZone;
+		// Using a DFJK model to name the bottom cirlces
 	sf::CircleShape DHitCircle;
 	sf::CircleShape FHitCircle;
 	sf::CircleShape JHitCircle;
 	sf::CircleShape KHitCircle;
-	sf::CircleShape singleTestNote;
 	sf::CircleShape sliderHead;
 	sf::CircleShape sliderTail;
 	// Texts
@@ -42,14 +45,29 @@ void loadAssets(sf::RenderWindow& window) {
 	playAreaBackground.setPosition(window.getSize().x / 2.f - playAreaBackground.getLocalBounds().width / 2.f, 0.f);
 	float playAreaBackgroundWidthPercent = playAreaBackground.getSize().x / 100.f;
 	float playAreaBackgroundHeightPercent = playAreaBackground.getSize().y / 100.f;
-	earlyMissZone.setSize(sf::Vector2f(playAreaBackground.getSize().x, playAreaBackgroundHeightPercent * 10.f));
-	earlyMissZone.setFillColor(sf::Color(255, 0, 0, 125));
-	earlyMissZone.setPosition(sf::Vector2f(playAreaBackground.getPosition().x, playAreaBackgroundHeightPercent * 70.f));
+	earlyMissZone.setSize(sf::Vector2f(playAreaBackground.getSize().x, playAreaBackgroundWidthPercent * 10.f));
+	earlyMissZone.setFillColor(sf::Color(255, 0, 0, 125));												   // This part = -outlineThickness + 10
+	earlyMissZone.setPosition(playAreaBackground.getPosition().x, playAreaBackgroundHeightPercent * 57.77f + 8.82f * playAreaBackgroundWidthPercent);
+	lateMissZone = earlyMissZone;
+	lateMissZone.setPosition(earlyMissZone.getPosition().x, 77.78f * playAreaBackgroundHeightPercent + 21.18f * playAreaBackgroundWidthPercent);
+	early50Zone = earlyMissZone;
+	early50Zone.setSize(sf::Vector2f(earlyMissZone.getSize().x, earlyMissZone.getSize().y * 0.75f));
+	early50Zone.setFillColor(sf::Color(255, 153, 51, 125));
+	early50Zone.setPosition(earlyMissZone.getPosition().x, earlyMissZone.getPosition().y + earlyMissZone.getSize().y);
+	early100Zone = early50Zone;
+	early100Zone.setSize(sf::Vector2f(early50Zone.getSize().x, early50Zone.getSize().y * 2.f));
+	early100Zone.setFillColor(sf::Color(0, 255, 0));
+	early100Zone.setPosition(early50Zone.getPosition().x, early50Zone.getPosition().y + early50Zone.getSize().y);
+	ThreeHundredZone = early100Zone;
+	ThreeHundredZone.setSize(sf::Vector2f());
+	ThreeHundredZone.setFillColor(sf::Color(0, 255, 255));
+	ThreeHundredZone.setPosition(early100Zone.getPosition().x, early100Zone.getPosition().y + early100Zone.getSize().y);
 	// CircleShape
 	DHitCircle.setRadius(playAreaBackground.getSize().x / 10.f);
 	DHitCircle.setFillColor(sf::Color(200, 200, 200, 50));
 	DHitCircle.setOutlineThickness(DHitCircle.getRadius() / 8.5f);
 	DHitCircle.setOutlineColor(sf::Color(200, 200, 200, 200));
+	DHitCircle.setPointCount(100);
 	DHitCircle.setPosition(sf::Vector2f(playAreaBackground.getPosition().x + DHitCircle.getOutlineThickness() + 2.1f * playAreaBackgroundWidthPercent, 77.78f * playAreaBackgroundHeightPercent));
 	FHitCircle = DHitCircle;
 	JHitCircle = DHitCircle;
@@ -57,10 +75,6 @@ void loadAssets(sf::RenderWindow& window) {
 	FHitCircle.setPosition(DHitCircle.getPosition().x + DHitCircle.getLocalBounds().width + 2.1f * playAreaBackgroundWidthPercent, DHitCircle.getPosition().y);
 	JHitCircle.setPosition(FHitCircle.getPosition().x + DHitCircle.getLocalBounds().width + 2.1f * playAreaBackgroundWidthPercent, DHitCircle.getPosition().y);
 	KHitCircle.setPosition(JHitCircle.getPosition().x + DHitCircle.getLocalBounds().width + 2.1f * playAreaBackgroundWidthPercent, DHitCircle.getPosition().y);
-	singleTestNote = DHitCircle;
-	singleTestNote.setFillColor(sf::Color::White);
-	singleTestNote.setOutlineThickness(0);
-	singleTestNote.setPosition(sf::Vector2f(DHitCircle.getPosition().x, -DHitCircle.getLocalBounds().height));
 	// Texts
 	FPSText.setFont(Arial);
 	FPSText.setCharacterSize(20);
@@ -81,7 +95,16 @@ void loadAssets(sf::RenderWindow& window) {
 void draw(sf::RenderWindow& window) {
 	window.clear();
 
+	// Debug part
 	window.draw(earlyMissZone);
+	window.draw(early50Zone);
+	window.draw(early100Zone);
+	window.draw(ThreeHundredZone);
+	//window.draw(late100zone);
+	//window.draw(late50zone);
+	window.draw(lateMissZone);
+
+	// Gameplay area
 	window.draw(playAreaBackground);
 	window.draw(FPSText);
 
@@ -89,8 +112,4 @@ void draw(sf::RenderWindow& window) {
 	window.draw(FHitCircle);
 	window.draw(JHitCircle);
 	window.draw(KHitCircle);
-
-	// Notes
-
-	window.draw(singleTestNote);
 }

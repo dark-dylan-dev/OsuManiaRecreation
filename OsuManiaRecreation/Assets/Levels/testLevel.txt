@@ -1,6 +1,6 @@
 #Name : Test level / 170BPM
 SPEED 170
-WAIT 10
+WAIT 3
 D
 F
 J

@@ -34,14 +34,7 @@ void Game::run() {
 		pollEvents(event);
 		update(deltaTime);
 		draw(window);
-		for (auto& note : levelNotesVector) {
-			window.draw(*note);
-		}
-
-		window.draw(comboText);
-		window.draw(scoreText);
-
-		window.display();
+		drawNotes();
 
 	}
 }
@@ -149,10 +142,20 @@ void Game::update(const float& deltaTime) {
 	else
 		scoreText.setString(std::to_string(score));
 	// Single note
-	singleTestNote.move(sf::Vector2f(0, deltaTime * 200));
 
 	for (auto& note : levelNotesVector) {
 		note->move(sf::Vector2f(0, deltaTime * 200));
 	}
 
+}
+
+void Game::drawNotes() {
+	for (auto& note : levelNotesVector) {
+		window.draw(*note);
+	}
+
+	window.draw(comboText);
+	window.draw(scoreText);
+
+	window.display();
 }

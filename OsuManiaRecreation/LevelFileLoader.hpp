@@ -55,19 +55,19 @@ void loadLevel(const std::string& filename, std::vector<std::unique_ptr<LevelNot
             for (int i = 0; i < lineContent.length(); ++i) {
                 if (lineContent[i] == 'D') {
                     std::cout << "D";
-                    allLevelNotes.push_back(noteFactory.createNote("singleNote", DHitCircle, cycleLevel));
+                    allLevelNotes.push_back(noteFactory.createNote("singleNote", DHitCircle, cycleLevel, 'D'));
                 }
                 else if (lineContent[i] == 'F') {
                     std::cout << "F";
-                    allLevelNotes.push_back(noteFactory.createNote("singleNote", FHitCircle, cycleLevel));
+                    allLevelNotes.push_back(noteFactory.createNote("singleNote", FHitCircle, cycleLevel, 'F'));
                 }
                 else if (lineContent[i] == 'J') {
                     std::cout << "J";
-                    allLevelNotes.push_back(noteFactory.createNote("singleNote", JHitCircle, cycleLevel));
+                    allLevelNotes.push_back(noteFactory.createNote("singleNote", JHitCircle, cycleLevel, 'J'));
                 }
                 else if (lineContent[i] == 'K') {
                     std::cout << "K";
-                    allLevelNotes.push_back(noteFactory.createNote("singleNote", KHitCircle, cycleLevel));
+                    allLevelNotes.push_back(noteFactory.createNote("singleNote", KHitCircle, cycleLevel, 'K'));
                 }
                 std::cout << '\n';
             }
