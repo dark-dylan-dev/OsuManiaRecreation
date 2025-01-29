@@ -9,6 +9,7 @@
 #include <sstream>
 #include <fstream>
 #include <memory>
+#include <algorithm>
 
 // SFML
 #include "SFML/Graphics.hpp"

@@ -50,6 +50,7 @@ void Game::FPSCalc(const float& deltaTime) {
 void Game::handleInputs(sf::Event event) {
 	// Pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		// Reprendre ici pour les hits (D, F, J et K)
 		if (!isDPressed) {
 			combo++;
 			score += 300;
@@ -93,7 +94,7 @@ void Game::pollEvents(sf::Event event) {
 		case sf::Event::Closed:
 			window.close();
 			break;
-		case sf::Event::KeyReleased:
+		case sf::Event::KeyReleased: // Use it later for sliders too
 			if (event.key.code == sf::Keyboard::D) {
 				DHitCircle.setFillColor(noPressHitCircle);
 				isDPressed = false;
@@ -142,16 +143,27 @@ void Game::update(const float& deltaTime) {
 	else
 		scoreText.setString(std::to_string(score));
 	// Single note
-
 	for (auto& note : levelNotesVector) {
-		note->move(sf::Vector2f(0, deltaTime * 200));
+		if (note == nullptr) {
+			// Juste pour skip la note vide
+		}
+		else if (note->getYPosition() > window.getSize().y) {
+			levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+			std::cout << "Deletion here" << '\n';
+		}
+		else {
+			note->move(sf::Vector2f(0, deltaTime * 200)); // 200 à changer en variable (vitesse de défilement des notes)
+		}
 	}
-
 }
 
 void Game::drawNotes() {
 	for (auto& note : levelNotesVector) {
-		window.draw(*note);
+		if (levelNotesVector.empty()) {
+			break;
+		}
+		if(note != nullptr)
+			window.draw(*note);
 	}
 
 	window.draw(comboText);

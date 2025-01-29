@@ -69,8 +69,8 @@ void loadLevel(const std::string& filename, std::vector<std::unique_ptr<LevelNot
                     std::cout << "K";
                     allLevelNotes.push_back(noteFactory.createNote("singleNote", KHitCircle, cycleLevel, 'K'));
                 }
-                std::cout << '\n';
             }
+            std::cout << '\n';
         }
         cycleLevel++;
     }
