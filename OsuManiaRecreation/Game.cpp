@@ -8,12 +8,11 @@ namespace {
 	std::vector<sf::CircleShape> hitCircles;
 }
 
+void hitVerification(sf::RenderWindow& window, const char& associatedKey, std::unique_ptr<LevelNotes>& note, int& combo, int& score, float& accuracy, int& count300, int& count100, int& count50, int& missCount);
+void accuracyCalc(sf::RenderWindow& window, int& count300, int& count100, int& count50, int& missCount, float& accuracy);
+
 Game::Game() :
-	window(sf::VideoMode::getFullscreenModes().at(2), "osu! mania recreation", sf::Style::Default),
-	isRunning(true),
-	deltaTime(0.f),
-	combo(0),
-	score(0)
+	window(sf::VideoMode::getFullscreenModes().at(2), "osu! mania recreation", sf::Style::Default)
 {
 	window.setActive(true);
 	window.setFramerateLimit(60);
@@ -53,21 +52,36 @@ void Game::FPSCalc(const float& deltaTime) {
 	FPSText.setString("FPS : " + FPSValue);
 }
 
+void accuracyCalc(sf::RenderWindow& window, int& count300, int& count100, int& count50, int& missCount, float& accuracy) {
+	std::cout << "[LOG] - Stats : " << '\n' << "   - 300 : " << count300 << '\n' << "   - 100 : " << count100 << '\n' << "   - 50 : " << count50 << '\n' << "   - Miss : " << missCount << '\n';
+	if (count300 == 0 && count100 == 0 && count50 == 0 && missCount == 0)
+		accuracy = 100.f;
+	else {
+		accuracy = (
+			(float)(300.f * count300 + 100.f * count100 + 50.f * count50)
+			/ 
+			(float)(300.f * (count300 + count100 + count50 + missCount))
+		);
+		accuracy *= 100;
+		std::cout << " - Acc : " << accuracy << "%" << '\n';
+		std::ostringstream oss;
+		oss << std::fixed << std::setprecision(2) << accuracy;
+		std::string AccValue = oss.str();
+		accuracyText.setString(AccValue + "%");
+		accuracyText.setPosition(sf::Vector2f((window.getSize().x * 0.99f) - accuracyText.getLocalBounds().width, window.getSize().y * 0.03f + scoreText.getLocalBounds().height));
+	}
+}
+
 void Game::handleInputs(sf::Event event) {
 	// Pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		// Reprendre ici pour les hits (D, F, J et K)
 		if (!isDPressed) {
 			for (auto& note : levelNotesVector) {
 				if (note == nullptr) {
 					// Skip it
 				}
 				else if (note->getAssociatedKey(hitCircles) == 'D') {
-					if (DHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || DHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
-						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
-						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
-						combo++;
-					}
+					hitVerification(window, note->getAssociatedKey(hitCircles), note, combo, score, accuracy, count300, count100, count50, missCount);
 				}
 			}
 		}
@@ -81,11 +95,7 @@ void Game::handleInputs(sf::Event event) {
 					// Skip it
 				}
 				else if (note->getAssociatedKey(hitCircles) == 'F') {
-					if (FHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || FHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
-						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
-						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
-						combo++;
-					}
+					hitVerification(window, note->getAssociatedKey(hitCircles), note, combo, score, accuracy, count300, count100, count50, missCount);
 				}
 			}
 		}
@@ -99,11 +109,7 @@ void Game::handleInputs(sf::Event event) {
 					// Skip it
 				}
 				else if (note->getAssociatedKey(hitCircles) == 'J') {
-					if (JHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || JHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
-						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
-						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
-						combo++;
-					}
+					hitVerification(window, note->getAssociatedKey(hitCircles), note, combo, score, accuracy, count300, count100, count50, missCount);
 				}
 			}
 		}
@@ -117,16 +123,58 @@ void Game::handleInputs(sf::Event event) {
 					// Skip it
 				}
 				else if (note->getAssociatedKey(hitCircles) == 'K') {
-					if (KHitCircle.getGlobalBounds().contains(sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius())) || KHitCircle.getGlobalBounds().intersects(note->getGlobalBounds())) {
-						levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
-						score += (300 + (300 * ((float)combo / 100.f))); // A changer par rapport à la précision du hit (Miss, 50, 100, 300)
-						combo++;
-					}
+					hitVerification(window, note->getAssociatedKey(hitCircles), note, combo, score, accuracy, count300, count100, count50, missCount);
 				}
 			}
 		}
 		KHitCircle.setFillColor(pressHitCircle);
 		isKPressed = true;
+	}
+}
+
+void hitVerification(sf::RenderWindow& window, const char& associatedKey, std::unique_ptr<LevelNotes>& note, int& combo, int& score, float& accuracy, int& count300, int& count100, int& count50, int& missCount) {
+	// notePosition : center point of the note
+	sf::Vector2f notePosition = sf::Vector2f(note->getPosition().x + note->getRadius(), note->getPosition().y + note->getRadius());
+	if (associatedKey == 'D' || associatedKey == 'F' || associatedKey == 'J' || associatedKey == 'K') {
+		if (ThreeHundredZone.getGlobalBounds().contains(notePosition)) { // 300
+			levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+			score += (int)(300 + (300 * ((float)combo / 100.f)));
+			count300++;
+			combo++;
+			softHitsound.play();
+			return;
+		}
+		else if(early100Zone.getGlobalBounds().contains(notePosition) || late100Zone.getGlobalBounds().contains(notePosition)) { // 100
+			levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+			score += (int)(100 + (100 * ((float)combo / 100.f)));
+			count100++;
+			combo++;
+			softHitsound.play();
+			return;
+		}
+		else if (early50Zone.getGlobalBounds().contains(notePosition) || late50Zone.getGlobalBounds().contains(notePosition)) { // 50
+			levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+			score += (int)(50 + (50 * ((float)combo / 100.f)));
+			combo++;
+			count50++;
+			softHitsound.play();
+			return;
+		}
+		else if (earlyMissZone.getGlobalBounds().contains(notePosition) || lateMissZone.getGlobalBounds().contains(notePosition)) { // Early / late miss
+			combo = 0;
+			missCount++;
+			levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
+			return;
+		}
+		else if (notePosition.y > lateMissZone.getPosition().y + lateMissZone.getSize().y) {
+			// Should normally never happen, just a safety measure.
+			combo = 0;
+			missCount++;
+		}
+		accuracyCalc(window, count300, count100, count50, missCount, accuracy);
+	}
+	else {
+		std::cerr << "No char matches the note at the adress " << &note << " ('" << associatedKey << "')" << '\n';
 	}
 }
 
@@ -168,8 +216,13 @@ void Game::update(const float& deltaTime) {
 	// comboText
 	if (combo > 0)
 		comboText.setString(std::to_string(combo));
-	if (combo % 10 == 0 && combo != 0) {
+	else if (combo == 0) {
+		comboText.setString("");
+		scoreTenth = 0;
+	}
+	if (combo > (10 * scoreTenth) && combo != 0) {
 		comboText.setPosition(sf::Vector2f((float)window.getSize().x / 2 - comboText.getLocalBounds().width / 2, (float)window.getSize().y / 2));
+		scoreTenth++;
 	}
 	// scoreText
 	if (score >= 0 && score < 10)
@@ -195,10 +248,12 @@ void Game::update(const float& deltaTime) {
 		}
 		else if (note->getYPosition() > window.getSize().y) {
 			levelNotesVector.erase(std::find(levelNotesVector.begin(), levelNotesVector.end(), note));
-			std::cout << "Deletion here" << '\n';
+			combo = 0;
+			missCount++;
+			accuracyCalc(window, count300, count100, count50, missCount, accuracy);
 		}
 		else {
-			note->move(sf::Vector2f(0, deltaTime * 200)); // 200 à changer en variable (vitesse de défilement des notes)
+			note->move(sf::Vector2f(0, deltaTime * 300)); // 200 à changer en variable (vitesse de défilement des notes)
 		}
 	}
 }

@@ -22,15 +22,21 @@ public:
 
 private:
 	// STL
-	bool isRunning;
-	float deltaTime;
+	bool isRunning = true;
+	float deltaTime = 0.f;
+	float accuracy = 100.f;
 	bool isLevelStarted = false;
 	bool isDPressed = false;
 	bool isFPressed = false;
 	bool isJPressed = false;
 	bool isKPressed = false;
-	unsigned int combo;
-	unsigned int score;
+	int combo = 0;
+	int score = 0;
+	int scoreTenth = 0;
+	int count300 = 0;
+	int count100 = 0;
+	int count50 = 0;
+	int missCount = 0;
 	// SFML
 	sf::RenderWindow window;
 	sf::Clock Clock;

@@ -5,7 +5,6 @@
 
 class LevelNotes : public sf::CircleShape {
 public:
-	bool isInTheSlot(const sf::CircleShape& noteSlot); // onPress
 	virtual float getYPosition() = 0; // Needs to be defined for singleNote and sliderNote
 	char getAssociatedKey(std::vector<sf::CircleShape>& hitCircles);
 };
@@ -13,7 +12,6 @@ public:
 class singleNote : public LevelNotes {
 private:
 	float noteSlot;
-	sf::Keyboard::Key associatedKey;
 public:
 	singleNote(sf::CircleShape& noteSlot, const int& cycleLevel, const char associatedKey);
 	float getYPosition() override;
@@ -23,7 +21,6 @@ class sliderNote : public LevelNotes {
 private:
 	float noteSlot;
 	float noteLength;
-	sf::Keyboard::Key associatedKey;
 public:
 	sliderNote(sf::CircleShape& noteSlot, float noteLength, const int& cycleLevel, const char associatedKey);
 	float getYPosition() override;
